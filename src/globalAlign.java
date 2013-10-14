@@ -89,7 +89,8 @@ public class globalAlign {
 		}
 		System.out.print(" 			Score: " + tempScore);
 		}
-	
+	//TODO Get the char at each thing and correctly print out the string
+
 
 
 private static void backTrace(Cell c, List<Paths> possiblePaths, Paths path){
