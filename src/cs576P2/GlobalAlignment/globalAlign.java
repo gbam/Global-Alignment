@@ -11,8 +11,8 @@ import java.util.List;
 public class globalAlign {
 
 	private static final int match = 1;
-	private static final int mismatch = 1;
-	private static final int gapPenalty = 2;
+	private static final int mismatch = -1;
+	private static final int gapPenalty = -2;
 	private static List<String> aligned;
 
 	public globalAlign(String[] args2) throws Exception {
@@ -96,7 +96,7 @@ public class globalAlign {
 		}
 		System.out.print(" 			Score: " + tempScore);
 		}
-	//TODO Get the char at each thing and correctly print out the string
+
 
 
 
@@ -138,12 +138,12 @@ private static void backTrace(Cell c, List<Paths> possiblePaths, Paths path){
 				boolean charMatch;
 				if(s1.charAt(i) == s2.charAt(j) && s1.compareTo(" ") != 0 && s2.compareTo(" ") != 0) charMatch = true;
 				else charMatch = false;
-				int upScore =  welTable[i-1][j].score - gapPenalty;
-				int leftScore = welTable[i][j-1].score - gapPenalty;
+				int upScore =  welTable[i-1][j].score + gapPenalty;
+				int leftScore = welTable[i][j-1].score + gapPenalty;
 				int diagScore;
 				welTable[i][j] = new Cell(-1, i, j, null);
 				if(charMatch)diagScore = welTable[i-1][j-1].score + match;
-				else diagScore = welTable[i-1][j-1].score - mismatch;
+				else diagScore = welTable[i-1][j-1].score + mismatch;
 
 				//IF all the cells somehow have the same cost
 				if(leftScore == upScore && leftScore == diagScore){
@@ -231,13 +231,13 @@ private static void backTrace(Cell c, List<Paths> possiblePaths, Paths path){
 	protected static void createScores(Cell[][] welTable){
 		//Initialize the first row
 		for (int i = 0; i < welTable.length; i++){
-			welTable[i][0] = new Cell(-i * gapPenalty, i, 0, null);
+			welTable[i][0] = new Cell(i * gapPenalty, i, 0, null);
 			if(i != 0) 	welTable[i][0].prevCell = 	welTable[i-1][0];
 
 		}
 		//Initialize the first column
 		for (int i = 0; i < welTable[0].length; i++){
-			welTable[0][i] = new Cell(-i * gapPenalty, i, 0, null);
+			welTable[0][i] = new Cell(i * gapPenalty, i, 0, null);
 			
 			if(i != 0) 	welTable[0][i].prevCell = 	welTable[0][i-1];
 		}
