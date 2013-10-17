@@ -13,13 +13,16 @@ public class globalAlign {
 	private static final int match = 1;
 	private static final int mismatch = -1;
 	private static final int gapPenalty = -2;
-	private static List<String> aligned;
+	private static Paths overalShortestPath;
 
-	public globalAlign(String[] args2) throws Exception {
-		main(args2);
+	public static void ga(String s1, String s2) throws Exception {
+		s1 = " " + s1;
+		s2 = " " + s2;
+		overalShortestPath = calculateGlobal(s1, s2);
 	}
-
-
+	public static Paths getShortestPath(){
+		return overalShortestPath;
+	}
 
 	/**
 	 * @param args
@@ -48,6 +51,10 @@ public class globalAlign {
 		}
 		s1 = " " + s1;
 		s2 = " " + s2;
+		calculateGlobal(s1, s2);
+	}
+	
+	private static Paths calculateGlobal(String s1, String s2) throws Exception{
 		Cell[][] welTable = new Cell[s1.length()][s2.length()];
 		createScores(welTable); //Initializes the first row / column
 		fillInTable(welTable, s1, s2); //Fills in the remaining spaces
@@ -95,6 +102,7 @@ public class globalAlign {
 			
 		}
 		System.out.print(" 			Score: " + tempScore);
+		return lowestPath;
 		}
 
 
@@ -242,9 +250,6 @@ private static void backTrace(Cell c, List<Paths> possiblePaths, Paths path){
 			if(i != 0) 	welTable[0][i].prevCell = 	welTable[0][i-1];
 		}
 	}
-	public List<String> getAligned1() throws Exception {
-		if(aligned == null)throw new Exception("No aligned Strings");
-		else return aligned;
-	}
+
 
 }
